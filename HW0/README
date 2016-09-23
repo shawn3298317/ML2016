@@ -1,0 +1,10 @@
+######################################
+# This is the Readme for ML_2016 HW0 #
+# From : Shawn Lin                   #
+# Email : b01901128@ntu.edu.tw       #
+# Date : 9/23/2016 14:24             #
+######################################
+
+
+Please install opencv and make sure you can import cv2 in your python script
+or else Q1.sh cannot be successfully executed.
