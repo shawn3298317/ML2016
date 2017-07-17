@@ -1,0 +1,131 @@
+from process_data import *
+import numpy as np
+import csv
+
+class LinearRegression:
+
+	def __init__(self, model, iters, lrate, regularizer, weight=[], bias=[]):
+		self.model = model
+		self.iters = iters
+		self.lrate = lrate
+		self.regularizer = regularizer
+
+		self.bias = np.random.rand(1)
+		if self.model == 1:
+			self.weight = np.random.rand(1)#*100
+
+		if self.model == 2:
+			self.weight = np.random.rand(9)
+
+		if self.model == 3:
+			self.weight = np.random.rand(18)
+
+		if self.model == 4:
+			self.weight = np.random.rand(18*9)
+
+		if weight and bias:
+			self.weight = weight
+			self.bias = bias
+
+	def train(self, train_data):
+
+		# self.optimal = [None]*2
+		# self.min_cost = float('inf')
+
+		for i in xrange(self.iters):
+			t_grad_w = np.zeros(len(self.weight))#[.0]*len(self.weight)
+			t_grad_b = np.zeros(len(self.bias))#[.0]*len(self.bias)
+			t_lost = 0.0
+			for data in train_data:
+				g_w, g_b, lost = self.get_gradients(data)
+				t_grad_w = t_grad_w + g_w
+				t_grad_b = t_grad_b + g_b
+				t_lost += lost
+
+			t_grad_w = t_grad_w/len(train_data)
+			t_grad_b = t_grad_b/len(train_data)
+			cost = t_lost/len(train_data)
+
+			#update
+			self.weight = self.weight - self.lrate*t_grad_w
+			self.bias = self.bias - self.lrate*t_grad_b
+			
+			# if cost < self.min_cost:
+				# self.optimal = [self.weight[:], self.bias[:]]
+			print i+1, t_lost/len(train_data)#, self.optimal
+		
+	def test(self, test_data):
+
+		for data in test_data:
+			x = np.array(data)
+			y = np.dot(self.weight,x) + self.bias[0]
+			yield y
+
+	def setTheta(self, weight, bias):
+		self.weight = weight
+		self.bias = bias
+
+	def get_optimal_theta(self):
+		return self.weight.tolist(), self.bias.tolist()
+
+	def get_gradients(self, data):
+
+		if self.model == 1:
+
+			X = np.array(data[:-1])
+			# print data, X
+			dist = 2*(data[-1] - np.dot(self.weight, X) - self.bias[0])
+			grad_w = (-1*dist)*X
+			grad_b = [-1*dist]
+
+			return grad_w, grad_b, (0.5*dist)**2
+
+		if self.model == 2:
+			
+			X = np.array(data[:-1])
+			# print data, X
+			dist = 2*(data[-1] - np.dot(self.weight, X) - self.bias[0])
+			grad_w = (-1*dist)*X
+			grad_b = [-1*dist]
+
+			return grad_w, grad_b, (0.5*dist)**2			
+
+		if self.model == 3:
+			X = np.array(data[:-1])
+			# print data, X
+			dist = 2*(data[-1] - np.dot(self.weight, X) - self.bias[0])
+			grad_w = (-1*dist)*X
+			grad_b = [-1*dist]
+
+			return grad_w, grad_b, (0.5*dist)**2
+
+		else:
+			X = np.array(data[:-1])
+			# print data, X
+			dist = 2*(data[-1] - np.dot(self.weight, X) - self.bias[0])
+			grad_w = (-1*dist)*X
+			grad_b = [-1*dist]
+
+			return grad_w, grad_b, (0.5*dist)**2	
+
+	def write_csv(self, fn, answer):
+
+		with open(fn, 'wb') as f:
+			writer = csv.writer(f, delimiter=',')
+			index = ['id_'+str(i) for i in range(240)]
+			writer.writerow(['id','value'])
+			for ans, ind in zip(answer, index):
+				writer.writerow([ind, ans])
+
+# train_XY = process_train('../data/train.csv', model=4)
+test_XY = process_test('../data/test_X.csv', model = 3)
+lg = LinearRegression(model=4, iters=20000, lrate=.000001, regularizer=False)##.00001
+lg.setTheta([-0.022230908549401362, 0.35047233329711175, 0.4203769561299879, 0.4916280486979449, 0.4715197167195003, 0.36412607811216197, 0.013765699746264059, 0.051631093562801454, -0.12032580500306071, 0.13315381522924424, 0.2090037367455103, -0.2227570241071624, 0.2909052178256665, 0.2721485973243261, -0.0016336219408892385, -0.00014815569511134014, 0.7348715879327139, -0.1486257187473242, -0.24182118267847896, 0.7068056190618002, 0.4673408396465936, 0.8138237146130634, 0.13092254459101707, -0.1592947668919814, -0.3400877688847251, -0.002748861513527572, 0.11220545691262239, -0.05221103536837545, 0.31624796001842415, -0.0017195110980738372, 0.22108358682339246, 0.5672954082164184, 0.002445202094782856, -0.0017384812118969733, 0.568320023240028, 0.31716000990723786, -0.1677530283413032, 0.7375032952132212, 0.12257591726610498, 0.3967315920077999, 0.010127638571234464, 0.11854866467235409, 0.10310220281132884, -0.15209201515441348, 0.007003634476349815, -0.04017621715354641, 0.6813009215373369, 0.22979230611672904, 0.45385915457391884, 0.5131829403016585, -0.0032414357266691484, 0.0033478290645903353, 0.30619083584472234, 0.30277206740824886, -0.2434810478641683, 0.5647534626688461, 0.18996931855578078, 0.5099722382965766, 0.5470617984027087, -0.07302024732155912, -0.3089813767033261, 0.1179949213964192, -0.16104281454858144, 0.0631280725520359, 0.05102141853356897, -0.15831869817416538, 0.5438425369038595, 0.2941752969932016, 0.0018492453966887847, -0.0017710577049265014, 0.17052539998978766, 0.6841603721026518, 0.01999603306855775, 0.7294899134567286, 0.4146628029566905, 0.20692651460258604, -0.2416456192861531, 0.160000251730715, 0.21493119243056935, -0.068787732489851, 0.11260708351153044, 0.18966597331388063, 0.40221226709515306, -0.10418625195388695, 0.423644748061118, 0.2517438342171066, -0.0037060435915583748, 0.0032417920055403254, 0.5186784849161381, 0.043500631670223035, -0.15339700199156867, 0.8851605438330896, 0.009898687068332234, 0.027586274776196996, 0.3519602593612769, -0.11591758838741595, -0.0586189126876559, 0.09881935663939569, 0.0030853084985534318, -0.28380141732989705, -0.05830528682713492, -0.11225388458592649, 0.5957016628033261, -0.04303999418037266, -0.004497628992420538, 0.001489549696472608, 0.6380547162521236, 0.46418718913399715, -0.15104216663009726, 0.020437939509618478, 0.3427158092439193, 0.785455321482727, 0.29587014859991057, -0.23116108888266668, -0.2812014050825173, -0.27992556953822223, -0.10534092933506292, -0.037703226035342735, -0.018477624473957573, 0.34260767365407013, 0.4916063263794585, 0.8955414633037276, -0.00561921741114351, 9.147419476515844e-05, -0.03510358012889961, 0.15817785012359026, 0.2684286379551853, 0.36861200572428, 0.028879693702964997, 0.682463623707398, -0.025464159954360324, -0.0941032666164218, 0.22769379126716024, 0.2647028944753597, 0.0636089467292639, 0.25323304637898747, 0.18653520378902763, -0.08336925209540529, 0.6268933969677434, 0.33383930370266585, -0.003833223889208141, -0.003128202595963379, -0.14452587898666078, -0.18958352389812083, 0.10826073223044141, 0.2851032861095015, 0.08752513484481006, 0.2763175115687191, 0.5289772812010577, -0.11354708101747353, 0.29701343858266277, 0.06637107771238043, 0.014365935694730844, 0.5739447508890957, 0.270474586413677, -0.13631608747011936, 0.36601650075165326, 0.8175881067189761, -0.00425635245318657, 0.0015885951123285461, 0.19997143973514225, 0.23110720331151063], [0.0426774712357614])
+lg.train(list(train_XY))
+print lg.get_optimal_theta()
+# answer = lg.test(test_XY)
+# lg.write_csv('ans.csv',answer)
+#1 
+#2 3052 43.4559135146 # lr=  .0001
+#3 4999 42.76746354   # lr = .00001
+#4 
