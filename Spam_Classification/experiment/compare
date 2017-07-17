@@ -1,0 +1,7 @@
+GD		10000ep 	lr=0.001 : Epoch 9900, Train loss: 0.258752 , Validation Acc: 0.740000
+Adam	10000ep 	lr=0.001 : Epoch 9900, Train loss: 0.098612 , Validation Acc: 0.935000 -> private 0.91667
+Adam	 2500ep 	lr=0.001 : Epoch 9900, Train loss: 0.113014 , Validation Acc: 0.935000 -> private 0.91000
+hid20	 5000ep		lr=0.001 : Epoch 5000, Train loss: 0.098734 , Validation Acc: 0.935000 -> private 0.92333
+hid20	10000ep 	lr=0.001 : Epoch 9900, Train loss: 0.095733 , Validation Acc: 0.937500 -> private 0.91667 (overfit)
+deep+cross 3000ep 				Epoch 3000, Train loss: 0.033466 , Validation Acc: 0.977500 -> private 0.92333
+deep+cross 10000ep 				Epoch 10000, Train loss: 0.021644 , Validation Acc: 0.982500 -> private 0.92333
