@@ -1,2 +1,3 @@
-data
-experiment
+/data
+/experiment
+/src/*.pyc
